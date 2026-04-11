@@ -1,0 +1,10 @@
+import { HttpInterceptorFn } from '@angular/common/http';
+import { KIKEVENT_ADMIN_TOKEN_KEY } from '../auth/auth.constants';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = localStorage.getItem(KIKEVENT_ADMIN_TOKEN_KEY);
+  if (token) {
+    req = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+  }
+  return next(req);
+};

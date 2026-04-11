@@ -1,0 +1,102 @@
+<div class="page">
+  <header class="page-head">
+    <h1>Demandes organizer</h1>
+    <p class="muted"><code>GET /api/v1/admin/organizer-requests</code> — <code>data.requests</code></p>
+    <button type="button" class="ke-btn ke-btn-ghost ke-btn-sm" (click)="load()" [disabled]="loading()">
+      Actualiser
+    </button>
+  </header>
+
+  @if (err()) {
+    <div class="ke-err">{{ err() }}</div>
+  }
+
+  <div class="split">
+    <div class="ke-table-wrap">
+      @if (loading()) {
+        <p class="pad muted">Chargement…</p>
+      } @else {
+        <table class="ke-table">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Email</th>
+              <th>Nom affiché</th>
+              <th>Statut doc.</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rows(); track row['userId']) {
+              <tr
+                (click)="select(row)"
+                [class.active]="selected()?.['userId'] === row['userId']"
+                class="click-row"
+              >
+                <td>{{ row['userId'] }}</td>
+                <td>{{ row['email'] }}</td>
+                <td>{{ displayName(row) }}</td>
+                <td>
+                  <span
+                    class="ke-badge"
+                    [class.ke-badge-warn]="docStatus(row) === 'PENDING'"
+                    [class.ke-badge-ok]="docStatus(row) === 'APPROVED'"
+                    [class.ke-badge-muted]="docStatus(row) !== 'PENDING' && docStatus(row) !== 'APPROVED'"
+                  >
+                    {{ docStatus(row) }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    <aside class="detail ke-card" [class.empty]="!selected()">
+      @if (!selected()) {
+        <p class="muted">Sélectionnez une ligne pour valider ou rejeter.</p>
+        <p class="hint">
+          <code>PATCH /admin/organizer-requests/&#123;userId&#125;/decision</code>
+        </p>
+      } @else {
+        <h2>Décision</h2>
+        <p><strong>User</strong> {{ selected()!['userId'] }} — {{ selected()!['email'] }}</p>
+        <p><strong>Profil</strong> {{ displayName(selected()!) }}</p>
+        <p>
+          <strong>Document</strong> {{ docStatus(selected()!) }}
+          @if (docFileUrl(selected()!); as url) {
+            — <a [href]="url" target="_blank" rel="noopener">Fichier</a>
+          }
+        </p>
+        <div class="ke-field">
+          <label for="rej">Motif de refus (si rejet)</label>
+          <textarea
+            id="rej"
+            rows="3"
+            [ngModel]="rejectionReason()"
+            (ngModelChange)="rejectionReason.set($event)"
+            placeholder="Obligatoire conseillé en cas de rejet"
+          ></textarea>
+        </div>
+        <div class="row-btns">
+          <button
+            type="button"
+            class="ke-btn ke-btn-primary"
+            [disabled]="busy()"
+            (click)="decide(true)"
+          >
+            Approuver
+          </button>
+          <button
+            type="button"
+            class="ke-btn ke-btn-danger"
+            [disabled]="busy()"
+            (click)="decide(false)"
+          >
+            Rejeter
+          </button>
+        </div>
+      }
+    </aside>
+  </div>
+</div>

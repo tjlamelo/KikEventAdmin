@@ -1,0 +1,39 @@
+<div class="login-page">
+  <div class="login-card ke-card">
+    <div class="brand">
+      <span class="logo">KE</span>
+      <div>
+        <h1>KikEvent Admin</h1>
+        <p class="sub">Connexion administrateur — API <code>api.vps.jbis.cm</code></p>
+      </div>
+    </div>
+
+    @if (errorMsg()) {
+      <div class="ke-err">{{ errorMsg() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="ke-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" autocomplete="username" />
+      </div>
+      <div class="ke-field">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+      </div>
+      <button class="ke-btn ke-btn-primary login-submit" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Connexion…' : 'Se connecter' }}
+      </button>
+    </form>
+
+    <p class="hint">
+      Contrat API :
+      <a [href]="swaggerUrl" target="_blank" rel="noopener">Swagger UI</a>
+    </p>
+  </div>
+</div>

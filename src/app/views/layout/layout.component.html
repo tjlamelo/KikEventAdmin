@@ -1,0 +1,32 @@
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sb-head">
+      <span class="sb-logo">KE</span>
+      <div>
+        <strong>KikEvent</strong>
+        <div class="sb-api" [title]="apiLabel">Admin</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+      <a routerLink="/users" routerLinkActive="active">Utilisateurs</a>
+      <a routerLink="/organizer-requests" routerLinkActive="active">Demandes organizer</a>
+      <a routerLink="/profiles" routerLinkActive="active">Profils</a>
+    </nav>
+    <div class="sb-foot">
+      <div class="user">
+        <span class="avatar">{{ (auth.user()?.username || '?').slice(0, 2).toUpperCase() }}</span>
+        <div class="meta">
+          <div class="name">{{ auth.user()?.username }}</div>
+          <div class="email">{{ auth.user()?.email }}</div>
+        </div>
+      </div>
+      <button type="button" class="ke-btn ke-btn-ghost ke-btn-sm" (click)="logout()">
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+  <main class="main">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,87 @@
+<div class="page">
+  <header class="page-head">
+    <h1>Utilisateurs</h1>
+    <p class="muted"><code>GET /api/v1/admin/users</code> — données dans <code>data.users</code></p>
+    <button type="button" class="ke-btn ke-btn-ghost ke-btn-sm" (click)="load()" [disabled]="loading()">
+      Actualiser
+    </button>
+  </header>
+
+  @if (err()) {
+    <div class="ke-err">{{ err() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="muted">Chargement…</p>
+  } @else {
+    <div class="ke-table-wrap">
+      <table class="ke-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Rôles</th>
+            <th>Actif</th>
+            <th>Créé</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row['id']) {
+            <tr>
+              <td>{{ row['id'] }}</td>
+              <td>{{ row['username'] }}</td>
+              <td>{{ row['email'] }}</td>
+              <td>{{ displayRoles(row) }}</td>
+              <td>
+                <span class="ke-badge" [class.ke-badge-ok]="row['enabled']" [class.ke-badge-warn]="!row['enabled']">
+                  {{ row['enabled'] ? 'Oui' : 'Non' }}
+                </span>
+              </td>
+              <td>{{ asDate(row['createdAt']) | date: 'short' }}</td>
+              <td class="actions">
+                <button
+                  type="button"
+                  class="ke-btn ke-btn-sm ke-btn-ghost"
+                  [disabled]="busyId() === row['id']"
+                  (click)="toggleEnabled(row)"
+                >
+                  {{ row['enabled'] ? 'Désactiver' : 'Activer' }}
+                </button>
+                <button
+                  type="button"
+                  class="ke-btn ke-btn-sm ke-btn-ghost"
+                  [disabled]="busyId() === row['id']"
+                  (click)="resetPassword(row)"
+                >
+                  MDP
+                </button>
+                <select
+                  class="role-select"
+                  (change)="assignRole(row, $any($event.target).value); $any($event.target).value = ''"
+                  [disabled]="busyId() === row['id']"
+                >
+                  <option value="">+ Rôle</option>
+                  @for (r of roles; track r) {
+                    <option [value]="r">{{ r }}</option>
+                  }
+                </select>
+                <select
+                  class="role-select"
+                  (change)="removeRole(row, $any($event.target).value); $any($event.target).value = ''"
+                  [disabled]="busyId() === row['id']"
+                >
+                  <option value="">− Rôle</option>
+                  @for (r of roles; track r) {
+                    <option [value]="r">{{ r }}</option>
+                  }
+                </select>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

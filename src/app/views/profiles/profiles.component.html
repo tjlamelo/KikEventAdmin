@@ -1,0 +1,97 @@
+<div class="page">
+  <header class="page-head">
+    <h1>Profils</h1>
+    <p class="muted"><code>GET /api/v1/admin/profiles</code> — <code>data.profiles</code></p>
+    <button type="button" class="ke-btn ke-btn-ghost ke-btn-sm" (click)="load()" [disabled]="loading()">
+      Actualiser
+    </button>
+  </header>
+
+  @if (err()) {
+    <div class="ke-err">{{ err() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="muted">Chargement…</p>
+  } @else {
+    <div class="ke-table-wrap">
+      <table class="ke-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Bio</th>
+            <th>MàJ</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row['id']) {
+            <tr>
+              <td>{{ row['id'] }}</td>
+              <td>{{ row['firstName'] }}</td>
+              <td>{{ row['lastName'] }}</td>
+              <td class="clip">{{ row['bio'] }}</td>
+              <td>{{ asDate(row['updatedAt']) | date: 'short' }}</td>
+              <td>
+                <button type="button" class="ke-btn ke-btn-sm ke-btn-ghost" (click)="openEdit(row)">
+                  Modifier
+                </button>
+                <button type="button" class="ke-btn ke-btn-sm ke-btn-danger" (click)="delete(row)">
+                  Suppr.
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (edit()) {
+    <div class="modal-backdrop" (click)="closeEdit()"></div>
+    <div class="modal ke-card">
+      <h2>Profil #{{ edit()!['id'] }}</h2>
+      <div class="ke-field">
+        <label>Prénom</label>
+        <input
+          type="text"
+          [ngModel]="form().firstName"
+          (ngModelChange)="patchFormField('firstName', $event)"
+        />
+      </div>
+      <div class="ke-field">
+        <label>Nom</label>
+        <input
+          type="text"
+          [ngModel]="form().lastName"
+          (ngModelChange)="patchFormField('lastName', $event)"
+        />
+      </div>
+      <div class="ke-field">
+        <label>Avatar URL</label>
+        <input
+          type="url"
+          [ngModel]="form().avatarUrl"
+          (ngModelChange)="patchFormField('avatarUrl', $event)"
+        />
+      </div>
+      <div class="ke-field">
+        <label>Bio</label>
+        <textarea
+          rows="3"
+          [ngModel]="form().bio"
+          (ngModelChange)="patchFormField('bio', $event)"
+        ></textarea>
+      </div>
+      <div class="row-btns">
+        <button type="button" class="ke-btn ke-btn-primary" [disabled]="busy()" (click)="save()">
+          Enregistrer
+        </button>
+        <button type="button" class="ke-btn ke-btn-ghost" (click)="closeEdit()">Annuler</button>
+      </div>
+      <p class="hint"><code>PUT /api/v1/admin/profiles/&#123;id&#125;</code></p>
+    </div>
+  }
+</div>

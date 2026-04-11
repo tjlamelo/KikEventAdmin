@@ -1,0 +1,41 @@
+<div class="page">
+  <header class="page-head">
+    <h1>Tableau de bord</h1>
+    <p class="muted">Vue synthétique des ressources admin exposées par l’API.</p>
+  </header>
+
+  @if (err()) {
+    <div class="ke-err">{{ err() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="muted">Chargement…</p>
+  } @else {
+    <div class="grid">
+      <a class="stat ke-card" routerLink="/users">
+        <span class="stat-label">Utilisateurs</span>
+        <span class="stat-value">{{ userCount() }}</span>
+        <span class="stat-link">Voir la liste →</span>
+      </a>
+      <a class="stat ke-card" routerLink="/organizer-requests">
+        <span class="stat-label">Demandes organizer</span>
+        <span class="stat-value">{{ organizerCount() }}</span>
+        <span class="stat-link">En attente : {{ pendingOrganizer() }}</span>
+      </a>
+      <a class="stat ke-card" routerLink="/profiles">
+        <span class="stat-label">Profils</span>
+        <span class="stat-value">{{ profileCount() }}</span>
+        <span class="stat-link">Gérer les profils →</span>
+      </a>
+    </div>
+
+    <div class="ke-card links">
+      <h2>Raccourcis API</h2>
+      <ul>
+        <li><code>GET /admin/users</code> — liste (<code>data.users</code>)</li>
+        <li><code>GET /admin/organizer-requests</code> — <code>data.requests</code></li>
+        <li><code>GET /admin/profiles</code> — <code>data.profiles</code></li>
+      </ul>
+    </div>
+  }
+</div>

@@ -1,0 +1,113 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: var(--ke-sidebar);
+  flex-shrink: 0;
+  background: var(--ke-surface);
+  border-right: 1px solid var(--ke-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sb-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 18px 16px;
+  border-bottom: 1px solid var(--ke-border);
+}
+
+.sb-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--ke-primary);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sb-api {
+  font-size: 11px;
+  color: var(--ke-muted);
+}
+
+.sb-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+  gap: 4px;
+  flex: 1;
+}
+
+.sb-nav a {
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--ke-muted);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.sb-nav a:hover {
+  background: #f3f4f6;
+  color: var(--ke-text);
+  text-decoration: none;
+}
+
+.sb-nav a.active {
+  background: #eef2ff;
+  color: var(--ke-primary);
+}
+
+.sb-foot {
+  padding: 12px;
+  border-top: 1px solid var(--ke-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: var(--ke-primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meta .name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.meta .email {
+  font-size: 11px;
+  color: var(--ke-muted);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+}
