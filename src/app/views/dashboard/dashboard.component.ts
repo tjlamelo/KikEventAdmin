@@ -9,8 +9,7 @@ import { ApiResponse } from '../../core/models/api-response.model';
   selector: 'app-dashboard',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
   private readonly api = inject(KikeventApiService);

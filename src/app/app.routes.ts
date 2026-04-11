@@ -36,11 +36,7 @@ export const routes: Routes = [
             (m) => m.OrganizerRequestsComponent
           )
       },
-      {
-        path: 'profiles',
-        loadComponent: () =>
-          import('./views/profiles/profiles.component').then((m) => m.ProfilesComponent)
-      }
+      { path: 'profiles', redirectTo: 'users', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: '' }

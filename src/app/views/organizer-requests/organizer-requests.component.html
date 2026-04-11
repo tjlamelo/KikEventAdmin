@@ -1,102 +1,123 @@
-<div class="page">
-  <header class="page-head">
-    <h1>Demandes organizer</h1>
-    <p class="muted"><code>GET /api/v1/admin/organizer-requests</code> — <code>data.requests</code></p>
-    <button type="button" class="ke-btn ke-btn-ghost ke-btn-sm" (click)="load()" [disabled]="loading()">
+<div class="min-h-screen bg-gray-50/50 p-4 sm:p-8">
+  <header class="mb-8 flex flex-wrap items-center justify-between gap-6">
+    <div class="space-y-1">
+      <div class="flex items-center gap-2 text-amber-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span class="text-xs font-bold uppercase tracking-[0.2em]">Vérification de documents</span>
+      </div>
+      <h1 class="text-3xl font-black text-gray-900 tracking-tight">Demandes Organizer</h1>
+      <p class="text-gray-500 max-w-xl">Validez les nouveaux organisateurs pour garantir la qualité des événements sur la plateforme.</p>
+    </div>
+    
+    <button (click)="load()" [disabled]="loading()" class="flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-bold text-gray-700 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:ring-violet-300">
+      <svg class="h-4 w-4" [class.animate-spin]="loading()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
       Actualiser
     </button>
   </header>
 
-  @if (err()) {
-    <div class="ke-err">{{ err() }}</div>
-  }
-
-  <div class="split">
-    <div class="ke-table-wrap">
+  <div class="grid gap-8 lg:grid-cols-[1fr_400px]">
+    
+    <div class="rounded-3xl border border-gray-200 bg-white shadow-xl shadow-gray-200/40 overflow-hidden">
       @if (loading()) {
-        <p class="pad muted">Chargement…</p>
+        <div class="p-12 text-center flex flex-col items-center gap-4">
+          <div class="h-10 w-10 animate-spin border-4 border-violet-100 border-t-violet-600 rounded-full"></div>
+          <span class="text-sm font-medium text-gray-400">Récupération des dossiers...</span>
+        </div>
+      } @else if (rows().length === 0) {
+        <div class="p-20 text-center">
+          <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900">Tout est à jour !</h3>
+          <p class="text-gray-500">Aucune nouvelle demande d'organisateur en attente.</p>
+        </div>
       } @else {
-        <table class="ke-table">
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>Email</th>
-              <th>Nom affiché</th>
-              <th>Statut doc.</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of rows(); track row['userId']) {
-              <tr
-                (click)="select(row)"
-                [class.active]="selected()?.['userId'] === row['userId']"
-                class="click-row"
-              >
-                <td>{{ row['userId'] }}</td>
-                <td>{{ row['email'] }}</td>
-                <td>{{ displayName(row) }}</td>
-                <td>
-                  <span
-                    class="ke-badge"
-                    [class.ke-badge-warn]="docStatus(row) === 'PENDING'"
-                    [class.ke-badge-ok]="docStatus(row) === 'APPROVED'"
-                    [class.ke-badge-muted]="docStatus(row) !== 'PENDING' && docStatus(row) !== 'APPROVED'"
-                  >
-                    {{ docStatus(row) }}
-                  </span>
-                </td>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="bg-gray-50/80 border-b border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                <th class="px-6 py-4">Utilisateur</th>
+                <th class="px-6 py-4">Nom de Scène</th>
+                <th class="px-6 py-4">Statut</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              @for (row of rows(); track row['userId']) {
+                <tr (click)="select(row)" class="group cursor-pointer transition-colors hover:bg-violet-50/50"
+                    [class.bg-violet-50]="selected()?.['userId'] === row['userId']">
+                  <td class="px-6 py-4">
+                    <div class="flex flex-col">
+                      <span class="font-bold text-gray-900">{{ row['email'] }}</span>
+                      <span class="text-[10px] text-gray-400">ID #{{ row['userId'] }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 font-medium text-gray-600">{{ displayName(row) }}</td>
+                  <td class="px-6 py-4">
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ring-1 ring-inset"
+                          [class.bg-amber-50]="docStatus(row) === 'PENDING'" [class.text-amber-700]="docStatus(row) === 'PENDING'" [class.ring-amber-200]="docStatus(row) === 'PENDING'"
+                          [class.bg-emerald-50]="docStatus(row) === 'APPROVED'" [class.text-emerald-700]="docStatus(row) === 'APPROVED'" [class.ring-emerald-200]="docStatus(row) === 'APPROVED'">
+                      <span class="h-1.5 w-1.5 rounded-full" [class.bg-amber-500]="docStatus(row) === 'PENDING'" [class.bg-emerald-500]="docStatus(row) === 'APPROVED'"></span>
+                      {{ docStatus(row) }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       }
     </div>
 
-    <aside class="detail ke-card" [class.empty]="!selected()">
-      @if (!selected()) {
-        <p class="muted">Sélectionnez une ligne pour valider ou rejeter.</p>
-        <p class="hint">
-          <code>PATCH /admin/organizer-requests/&#123;userId&#125;/decision</code>
-        </p>
-      } @else {
-        <h2>Décision</h2>
-        <p><strong>User</strong> {{ selected()!['userId'] }} — {{ selected()!['email'] }}</p>
-        <p><strong>Profil</strong> {{ displayName(selected()!) }}</p>
-        <p>
-          <strong>Document</strong> {{ docStatus(selected()!) }}
-          @if (docFileUrl(selected()!); as url) {
-            — <a [href]="url" target="_blank" rel="noopener">Fichier</a>
-          }
-        </p>
-        <div class="ke-field">
-          <label for="rej">Motif de refus (si rejet)</label>
-          <textarea
-            id="rej"
-            rows="3"
-            [ngModel]="rejectionReason()"
-            (ngModelChange)="rejectionReason.set($event)"
-            placeholder="Obligatoire conseillé en cas de rejet"
-          ></textarea>
-        </div>
-        <div class="row-btns">
-          <button
-            type="button"
-            class="ke-btn ke-btn-primary"
-            [disabled]="busy()"
-            (click)="decide(true)"
-          >
-            Approuver
-          </button>
-          <button
-            type="button"
-            class="ke-btn ke-btn-danger"
-            [disabled]="busy()"
-            (click)="decide(false)"
-          >
-            Rejeter
-          </button>
-        </div>
-      }
+    <aside class="relative">
+      <div class="sticky top-8 rounded-3xl border-2 border-white bg-white p-8 shadow-2xl shadow-gray-200/60 backdrop-blur-xl">
+        @if (!selected()) {
+          <div class="flex h-64 flex-col items-center justify-center text-center">
+            <div class="mb-4 h-16 w-16 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5" /></svg>
+            </div>
+            <p class="text-sm font-medium text-gray-400">Sélectionnez une demande pour agir</p>
+          </div>
+        } @else {
+          <div class="space-y-6 animate-in slide-in-from-bottom-4 duration-300">
+            <h2 class="text-xl font-black text-gray-900">Étude du dossier</h2>
+            
+            <div class="space-y-4 rounded-2xl bg-gray-50/50 p-4 ring-1 ring-gray-100">
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase text-gray-400">Identité</span>
+                <span class="font-bold text-gray-900">{{ displayName(selected()!) }}</span>
+              </div>
+              
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold uppercase text-gray-400">Justificatif</span>
+                @if (docFileUrl(selected()!); as url) {
+                  <a [href]="url" target="_blank" class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-violet-200 transition-transform hover:scale-[1.02]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    Voir le document
+                  </a>
+                } @else {
+                  <span class="text-sm font-medium text-red-500 italic">Aucun fichier fourni</span>
+                }
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label for="rej" class="text-xs font-bold uppercase tracking-wider text-gray-500">Motif de refus</label>
+              <textarea id="rej" rows="4" [ngModel]="rejectionReason()" (ngModelChange)="rejectionReason.set($event)"
+                        placeholder="Ex: Le document est illisible ou expiré..."
+                        class="w-full rounded-2xl border-none bg-gray-50 p-4 text-sm font-medium ring-1 ring-gray-200 transition-all focus:bg-white focus:ring-2 focus:ring-violet-500 outline-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 pt-4">
+              <button (click)="decide(false)" [disabled]="busy()" class="rounded-xl border border-red-100 bg-red-50 py-4 text-sm font-bold text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50">
+                Rejeter
+              </button>
+              <button (click)="decide(true)" [disabled]="busy()" class="rounded-xl bg-gray-900 py-4 text-sm font-bold text-white shadow-xl transition-all hover:bg-violet-600 disabled:opacity-50">
+                {{ busy() ? 'Envoi...' : 'Approuver' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
     </aside>
   </div>
 </div>

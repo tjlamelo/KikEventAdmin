@@ -1,39 +1,76 @@
-<div class="login-page">
-  <div class="login-card ke-card">
-    <div class="brand">
-      <span class="logo">KE</span>
-      <div>
-        <h1>KikEvent Admin</h1>
-        <p class="sub">Connexion administrateur — API <code>api.vps.jbis.cm</code></p>
+<div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fafafa] p-6">
+  <div class="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-violet-100/50 blur-3xl"></div>
+  <div class="absolute -right-20 -bottom-20 h-80 w-80 rounded-full bg-fuchsia-100/50 blur-3xl"></div>
+
+  <div class="relative w-full max-w-[440px] animate-in fade-in zoom-in-95 duration-500">
+    <div class="rounded-[2rem] border border-white bg-white/80 p-10 shadow-[0_20px_50px_rgba(0,0,0,0,0.05)] backdrop-blur-xl">
+      
+      <div class="mb-10 text-center">
+        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 shadow-lg shadow-violet-200">
+          <span class="text-2xl font-black tracking-tighter text-white">KE</span>
+        </div>
+        <h1 class="text-2xl font-black text-gray-900 tracking-tight">Espace Admin</h1>
+        <p class="mt-2 text-sm font-medium text-gray-500">Heureux de vous revoir sur KikEvent</p>
       </div>
+
+      @if (errorMsg()) {
+        <div class="mb-6 flex items-center gap-3 rounded-2xl border border-red-100 bg-red-50/50 p-4 text-red-800 animate-in slide-in-from-top-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+          <span class="text-xs font-bold">{{ errorMsg() }}</span>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+        <div class="group space-y-2">
+          <label for="email" class="ml-1 text-[11px] font-bold uppercase tracking-widest text-gray-400 transition-colors group-focus-within:text-violet-600">
+            Identifiant Email
+          </label>
+          <div class="relative">
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="admin@kikevent.cm"
+              class="w-full rounded-2xl border-gray-100 bg-gray-50/50 px-5 py-4 text-sm font-medium outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10"
+            />
+          </div>
+        </div>
+
+        <div class="group space-y-2">
+          <div class="flex justify-between items-center px-1">
+            <label for="password" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 transition-colors group-focus-within:text-violet-600">
+              Mot de passe
+            </label>
+            <a href="#" class="text-[10px] font-bold text-violet-600 hover:underline">Oublié ?</a>
+          </div>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••"
+            class="w-full rounded-2xl border-gray-100 bg-gray-50/50 px-5 py-4 text-sm font-medium outline-none transition-all focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10"
+          />
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="loading()"
+          class="relative w-full overflow-hidden rounded-2xl bg-gray-900 py-4 text-sm font-bold text-white transition-all hover:bg-violet-600 hover:shadow-xl hover:shadow-violet-200 active:scale-[0.98] disabled:opacity-70"
+        >
+          @if (loading()) {
+            <div class="flex items-center justify-center gap-3">
+              <svg class="h-4 w-4 animate-spin text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              Authentification...
+            </div>
+          } @else {
+            Se connecter
+          }
+        </button>
+      </form>
     </div>
 
-    @if (errorMsg()) {
-      <div class="ke-err">{{ errorMsg() }}</div>
-    }
-
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="ke-field">
-        <label for="email">Email</label>
-        <input id="email" type="email" formControlName="email" autocomplete="username" />
-      </div>
-      <div class="ke-field">
-        <label for="password">Mot de passe</label>
-        <input
-          id="password"
-          type="password"
-          formControlName="password"
-          autocomplete="current-password"
-        />
-      </div>
-      <button class="ke-btn ke-btn-primary login-submit" type="submit" [disabled]="loading()">
-        {{ loading() ? 'Connexion…' : 'Se connecter' }}
-      </button>
-    </form>
-
-    <p class="hint">
-      Contrat API :
-      <a [href]="swaggerUrl" target="_blank" rel="noopener">Swagger UI</a>
+    <p class="mt-8 text-center text-xs font-medium text-gray-400">
+      &copy; 2026 KikEvent Pro. Tous droits réservés.
     </p>
   </div>
 </div>

@@ -1,32 +1,71 @@
-<div class="shell">
-  <aside class="sidebar">
-    <div class="sb-head">
-      <span class="sb-logo">KE</span>
-      <div>
-        <strong>KikEvent</strong>
-        <div class="sb-api" [title]="apiLabel">Admin</div>
+<div class="flex min-h-screen bg-gray-50">
+  <aside
+    class="sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-gray-200 bg-white"
+  >
+    <div class="flex items-start gap-3 border-b border-gray-200 px-4 py-5">
+      <span
+        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-600 text-xs font-extrabold text-white"
+        aria-hidden="true"
+        >KE</span
+      >
+      <div class="min-w-0">
+        <div class="font-bold text-gray-900">KikEvent</div>
+        <div class="text-xs text-gray-500">Console administrateur</div>
       </div>
     </div>
-    <nav class="sb-nav">
-      <a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
-      <a routerLink="/users" routerLinkActive="active">Utilisateurs</a>
-      <a routerLink="/organizer-requests" routerLinkActive="active">Demandes organizer</a>
-      <a routerLink="/profiles" routerLinkActive="active">Profils</a>
+    <nav class="flex flex-1 flex-col gap-6 overflow-y-auto p-3" aria-label="Navigation principale">
+      <div>
+        <div class="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+          Vue d’ensemble
+        </div>
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="bg-violet-50 text-violet-700"
+          class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >Tableau de bord</a
+        >
+      </div>
+      <div>
+        <div class="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Annuaire</div>
+        <a
+          routerLink="/users"
+          routerLinkActive="bg-violet-50 text-violet-700"
+          class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >Utilisateurs</a
+        >
+      </div>
+      <div>
+        <div class="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-400">Modération</div>
+        <a
+          routerLink="/organizer-requests"
+          routerLinkActive="bg-violet-50 text-violet-700"
+          class="block rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+          >Demandes organizer</a
+        >
+      </div>
     </nav>
-    <div class="sb-foot">
-      <div class="user">
-        <span class="avatar">{{ (auth.user()?.username || '?').slice(0, 2).toUpperCase() }}</span>
-        <div class="meta">
-          <div class="name">{{ auth.user()?.username }}</div>
-          <div class="email">{{ auth.user()?.email }}</div>
+    <div class="border-t border-gray-200 p-3">
+      <div class="mb-3 flex items-center gap-2">
+        <span
+          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-800"
+          aria-hidden="true"
+          >{{ (auth.user()?.username || '?').slice(0, 2).toUpperCase() }}</span
+        >
+        <div class="min-w-0 flex-1">
+          <div class="truncate text-sm font-semibold text-gray-900">{{ auth.user()?.username }}</div>
+          <div class="truncate text-xs text-gray-500">{{ auth.user()?.email }}</div>
         </div>
       </div>
-      <button type="button" class="ke-btn ke-btn-ghost ke-btn-sm" (click)="logout()">
+      <button
+        type="button"
+        (click)="logout()"
+        class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50"
+      >
         Déconnexion
       </button>
     </div>
   </aside>
-  <main class="main">
+  <main class="min-w-0 flex-1 p-6 lg:p-8">
     <router-outlet />
   </main>
 </div>

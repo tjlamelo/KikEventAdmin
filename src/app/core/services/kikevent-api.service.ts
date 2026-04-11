@@ -20,9 +20,8 @@ import {
  *
  * Swagger UI : https://api.vps.jbis.cm/swagger-ui/index.html
  *
- * Remarque : il n’existe pas encore sur ce backend de routes type
- * /admin/events, /admin/stats/dashboard, /admin/billing, etc.
- * Les ajouter ici quand elles seront publiées dans la spec.
+ * Admin couvert aujourd’hui : utilisateurs, profils, demandes organizer (voir Swagger).
+ * Étendre ce service si de nouvelles routes admin (événements, stats, etc.) sont ajoutées.
  */
 @Injectable({ providedIn: 'root' })
 export class KikeventApiService {

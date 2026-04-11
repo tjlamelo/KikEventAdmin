@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KikeventApiService } from '../../core/services/kikevent-api.service';
+import { isApiSuccessStatus } from '../../core/admin/api-success';
 
 type OrgRow = Record<string, unknown>;
 
@@ -8,8 +9,7 @@ type OrgRow = Record<string, unknown>;
   selector: 'app-organizer-requests',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './organizer-requests.component.html',
-  styleUrl: './organizer-requests.component.scss'
+  templateUrl: './organizer-requests.component.html'
 })
 export class OrganizerRequestsComponent implements OnInit {
   private readonly api = inject(KikeventApiService);
@@ -79,7 +79,7 @@ export class OrganizerRequestsComponent implements OnInit {
       .subscribe({
         next: (r) => {
           this.busy.set(false);
-          if (r.status === 200) {
+          if (isApiSuccessStatus(r.status)) {
             this.selected.set(null);
             this.load();
           } else {
